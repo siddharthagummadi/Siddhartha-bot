@@ -12,9 +12,9 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 
 # --- Streamlit UI ---
-st.set_page_config(page_title="Bhilwara Career Assistant", layout="centered")
+st.set_page_config(page_title="Siddhartha Career Assistant", layout="centered")
 
-st.title("🎓 Bhilwara Placement & Career Assistant")
+st.title("🎓 Siddhartha Placement & Career Assistant")
 st.write("Your personalised career assistant for Bhilwara degree students.")
 
 # Initialize chat history with Bhilwara-specific system prompt
@@ -23,11 +23,11 @@ if "messages" not in st.session_state:
         {
             "role": "system",
             "content": (
-                "You are a placement and career assistant for students in Bhilwara. "
+                "You are a placement and career assistant for students in Hyderabad. "
                 "Guide them for IT jobs, government jobs, internships, resume building, "
                 "communication skills, coding basics, interview preparation, "
                 "and practical career paths suitable for students from small towns, degree colleges, "
-                "and rural backgrounds. Use simple English and optional Hinglish. "
+                "and rural backgrounds. Use simple English and optional Tenglish. "
                 "Give realistic, actionable advice for Bhilwara students."
             ),
         }
@@ -69,3 +69,4 @@ if user_input:
 
         except Exception as e:
             placeholder.write(f"Error: {str(e)}")
+
