@@ -1,85 +1,61 @@
 import streamlit as st
 from openai import OpenAI
+import os
 
-# --- Streamlit Config ---
-st.set_page_config(
-    page_title="Hey Buddy 👋",
-    layout="centered"
-)
-
-st.title("🤍 Siddhartha's AI Friend")
-st.write("Talk freely. I'm here to listen, support, and chill with you.")
-
-# --- Load API Key ---
+# --- Use Streamlit Secrets (secure) ---
 api_key = st.secrets.get("OPENAI_API_KEY")
+
 if not api_key:
     st.error("❌ OPENAI_API_KEY not found in Streamlit Secrets.")
     st.stop()
 
 client = OpenAI(api_key=api_key)
 
-# --- Language Selector ---
-language_mode = st.selectbox(
-    "🗣️ Choose how I talk to you",
-    ["English", "Tenglish (Telugu + English)", "Hinglish (Hindi + English)"]
-)
+# --- Streamlit UI ---
+st.set_page_config(page_title="Siddhartha Career Assistant", layout="centered")
 
-# --- Handle Language Change ---
-if "selected_language" not in st.session_state:
-    st.session_state.selected_language = language_mode
+st.title("🎓 Siddhartha Placement & Career Assistant")
+st.write("Your personalised career assistant for Bhilwara degree students.")
 
-if st.session_state.selected_language != language_mode:
-    st.session_state.selected_language = language_mode
-    st.session_state.messages = []
-    st.rerun()
-
-# --- Initialize Chat ---
+# Initialize chat history with Bhilwara-specific system prompt
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "system",
             "content": (
-                "You are Siddhartha's AI friend. "
-                "You talk like a close, supportive friend, not like a teacher or chatbot. "
-                "You listen patiently, respond with empathy, encouragement, and honesty. "
-                "You can talk about daily life, stress, motivation, studies, career, "
-                "friendships, relationships, self-doubt, fun topics, and random thoughts. "
-                "Keep replies natural, warm, and human-like. "
-                "If the user is sad or stressed, comfort them first before giving advice. "
-                f"Use this language style: {language_mode}. "
-                "Never sound robotic or overly formal."
+                "You are a placement and career assistant for students in Hyderabad. "
+                "Guide them for IT jobs, government jobs, internships, resume building, "
+                "communication skills, coding basics, interview preparation, "
+                "and practical career paths suitable for students from small towns, degree colleges, "
+                "and rural backgrounds. Use simple English and optional Tenglish. "
+                "Give realistic, actionable advice for Bhilwara students."
             ),
         }
     ]
 
-# --- Display Messages (Hide system messages) ---
+# Display previous messages
 for msg in st.session_state.messages:
-    if msg["role"] != "system":
-        with st.chat_message(msg["role"]):
-            st.write(msg["content"])
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
 
-# --- User Input ---
-user_input = st.chat_input("Say anything... I'm listening 🙂")
+# User Input
+user_input = st.chat_input("Ask something about careers, jobs, or placements...")
 
 if user_input:
     # Add user message
-    st.session_state.messages.append(
-        {"role": "user", "content": user_input}
-    )
+    st.session_state.messages.append({"role": "user", "content": user_input})
 
     with st.chat_message("user"):
         st.write(user_input)
 
+    # Assistant response
     with st.chat_message("assistant"):
         placeholder = st.empty()
-        placeholder.write("🤔 Thinking...")
+        placeholder.write("Thinking...")
 
         try:
-            # Limit history to avoid token overflow
-            st.session_state.messages = st.session_state.messages[-15:]
-
             response = client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-4.1-mini",
                 messages=st.session_state.messages
             )
 
@@ -92,7 +68,7 @@ if user_input:
             )
 
         except Exception as e:
-                placeholder.write(f"❌ API Error: {str(e)}")
+            placeholder.write(f"Error: {str(e)}")
 
 
-
+check this
