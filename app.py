@@ -79,7 +79,7 @@ if user_input:
             st.session_state.messages = st.session_state.messages[-15:]
 
             response = client.chat.completions.create(
-                model="model="gpt-4o-mini"",
+                model="gpt-4o-mini",
                 messages=st.session_state.messages
             )
 
@@ -93,5 +93,6 @@ if user_input:
 
         except Exception as e:
                 placeholder.write(f"❌ API Error: {str(e)}")
+
 
 
