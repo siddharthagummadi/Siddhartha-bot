@@ -79,7 +79,7 @@ if user_input:
             st.session_state.messages = st.session_state.messages[-15:]
 
             response = client.chat.completions.create(
-                model="gpt-4.1-mini",
+                model="model="gpt-4o-mini"",
                 messages=st.session_state.messages
             )
 
@@ -91,5 +91,7 @@ if user_input:
                 {"role": "assistant", "content": ai_reply}
             )
 
-        except Exception:
-            placeholder.write("⚠️ Something went wrong. Please try again.")
+        except Exception as e:
+                placeholder.write(f"❌ API Error: {str(e)}")
+
+
