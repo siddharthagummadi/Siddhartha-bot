@@ -12,10 +12,26 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 
 # --- Streamlit UI ---
-st.set_page_config(page_title="Siddhartha Career Assistant", layout="centered")
+st.set_page_config(
+    page_title="Hey Buddy 👋",
+    layout="centered"
+)
 
-st.title("🎓 Siddhartha Placement & Career Assistant")
-st.write("Your personalised career assistant for Bhilwara degree students.")
+st.title("🤍 Siddhartha's AI Friend")
+st.write("Talk freely. I'm here to listen, support, and chill with you.")
+
+language_mode = st.selectbox(
+    "🗣️ Choose how I talk to you",
+    ["English", "Tenglish (Telugu + English)", "Hinglish (Hindi + English)"]
+)
+
+if "selected_language" not in st.session_state:
+    st.session_state.selected_language = language_mode
+
+if st.session_state.selected_language != language_mode:
+    st.session_state.selected_language = language_mode
+    st.session_state.messages = []  # reset chat
+    st.rerun()
 
 # Initialize chat history with Bhilwara-specific system prompt
 if "messages" not in st.session_state:
@@ -23,12 +39,15 @@ if "messages" not in st.session_state:
         {
             "role": "system",
             "content": (
-                "You are a placement and career assistant for students in Hyderabad. "
-                "Guide them for IT jobs, government jobs, internships, resume building, "
-                "communication skills, coding basics, interview preparation, "
-                "and practical career paths suitable for students from small towns, degree colleges, "
-                "and rural backgrounds. Use simple English and optional Tenglish. "
-                "Give realistic, actionable advice for Bhilwara students."
+                "You are Siddhartha's AI friend. "
+                "You talk like a close, supportive friend, not like a teacher or chatbot. "
+                "You listen patiently, respond with empathy, encouragement, and honesty. "
+                "You can talk about daily life, stress, motivation, studies, career, "
+                "friendships, relationships, self-doubt, fun topics, and random thoughts. "
+                "Keep replies natural, warm, and human-like. "
+                "If the user is sad or stressed, comfort them first before giving advice. "
+                f"Use this language style: {language_mode}. "
+                "Never sound robotic or overly formal."
             ),
         }
     ]
@@ -39,12 +58,15 @@ for msg in st.session_state.messages:
         st.write(msg["content"])
 
 # User Input
-user_input = st.chat_input("Ask something about careers, jobs, or placements...")
+user_input = st.chat_input("Say anything... I'm listening 🙂")
 
 if user_input:
     # Add user message
-    st.session_state.messages.append({"role": "user", "content": user_input})
-
+    st.session_state.messages.append({
+    "role": "system",
+    "content": "Respond casually like a close friend. Keep it warm and natural."
+})
+    
     with st.chat_message("user"):
         st.write(user_input)
 
@@ -69,4 +91,5 @@ if user_input:
 
         except Exception as e:
             placeholder.write(f"Error: {str(e)}")
+
 
