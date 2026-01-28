@@ -69,6 +69,3 @@ if user_input:
 
         except Exception as e:
             placeholder.write(f"Error: {str(e)}")
-
-
-check this
